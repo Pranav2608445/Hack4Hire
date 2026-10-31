@@ -1,0 +1,72 @@
+
+======================================================================
+ACTUAL JOB IDs IN DATABASE
+======================================================================
+
+2026-10-30 23:09:14,937 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-30 23:09:14,940 INFO sqlalchemy.engine.Engine SELECT jobs.id AS jobs_id, jobs.title AS jobs_title, jobs.description AS jobs_description, jobs.location AS jobs_location, jobs.service_zone_id AS jobs_service_zone_id, jobs.duration_minutes AS jobs_duration_minutes, jobs.time_window_start AS jobs_time_window_start, jobs.time_window_end AS jobs_time_window_end, jobs.sla_deadline AS jobs_sla_deadline, jobs.priority AS jobs_priority, jobs.status AS jobs_status, jobs.created_at AS jobs_created_at, jobs.updated_at AS jobs_updated_at 
+FROM jobs
+ LIMIT ? OFFSET ?
+2026-10-30 23:09:14,940 INFO sqlalchemy.engine.Engine [generated in 0.00041s] (10, 0)
+2026-10-30 23:09:14,958 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT jobs.id AS jobs_id, jobs.title AS jobs_title, jobs.description AS jobs_description, jobs.location AS jobs_location, jobs.service_zone_id AS jobs_service_zone_id, jobs.duration_minutes AS jobs_duration_minutes, jobs.time_window_start AS jobs_time_window_start, jobs.time_window_end AS jobs_time_window_end, jobs.sla_deadline AS jobs_sla_deadline, jobs.priority AS jobs_priority, jobs.status AS jobs_status, jobs.created_at AS jobs_created_at, jobs.updated_at AS jobs_updated_at 
+FROM jobs) AS anon_1
+2026-10-30 23:09:14,958 INFO sqlalchemy.engine.Engine [generated in 0.00027s] ()
+Showing first 10 jobs out of 115 total:
+
+1. ID: de662bb9-e2a7-45ea-8a2a-fe810fb8d7db
+   Title: Install new door
+   Status: assigned
+   Priority: high
+
+2. ID: d5a0e879-9b8d-40ca-958a-71b0fbfb3ec1
+   Title: Service HVAC system
+   Status: assigned
+   Priority: critical
+
+3. ID: 2b6d5b4c-0db0-414f-afb9-28a363aa620c
+   Title: Fix leaking faucet
+   Status: assigned
+   Priority: medium
+
+4. ID: fb2ab573-0f2f-492c-971d-1ea8b68d3a1e
+   Title: Replace door lock
+   Status: assigned
+   Priority: medium
+
+5. ID: b6218f86-bc80-4f83-b5bc-22c24a20084b
+   Title: Install new door
+   Status: assigned
+   Priority: low
+
+6. ID: e1841625-9807-4bff-99cd-3f3b96bdd7a5
+   Title: Fix circuit breaker
+   Status: assigned
+   Priority: high
+
+7. ID: aa3685ee-5d73-4288-b464-7ffe72d5c77e
+   Title: Install new flooring
+   Status: assigned
+   Priority: medium
+
+8. ID: 225b9a42-c183-4081-80b1-5fd33fd78197
+   Title: Install new door
+   Status: assigned
+   Priority: low
+
+9. ID: 71f5c16e-f602-467e-a27d-e6142dfd7913
+   Title: Replace door lock
+   Status: assigned
+   Priority: medium
+
+10. ID: 8323b2cd-be49-46ff-8fee-ba4a34dc3de7
+   Title: Repair drywall damage
+   Status: assigned
+   Priority: medium
+
+2026-10-30 23:09:14,959 INFO sqlalchemy.engine.Engine ROLLBACK
+======================================================================
+To test GET /api/jobs/{id}, use one of these UUIDs above
+Example: http://localhost:8000/api/jobs/de662bb9-e2a7-45ea-8a2a-fe810fb8d7db
+======================================================================
+

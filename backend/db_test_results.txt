@@ -1,0 +1,194 @@
+
+======================================================================
+DATABASE OPERATIONS TEST - Storage & Retrieval Verification
+======================================================================
+
+TEST 1: Checking database connection...
+----------------------------------------------------------------------
+[SUCCESS] Database connection established
+
+TEST 2: Checking existing data...
+----------------------------------------------------------------------
+2026-10-30 23:04:20,157 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-30 23:04:20,177 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT jobs.id AS jobs_id, jobs.title AS jobs_title, jobs.description AS jobs_description, jobs.location AS jobs_location, jobs.service_zone_id AS jobs_service_zone_id, jobs.duration_minutes AS jobs_duration_minutes, jobs.time_window_start AS jobs_time_window_start, jobs.time_window_end AS jobs_time_window_end, jobs.sla_deadline AS jobs_sla_deadline, jobs.priority AS jobs_priority, jobs.status AS jobs_status, jobs.created_at AS jobs_created_at, jobs.updated_at AS jobs_updated_at 
+FROM jobs) AS anon_1
+2026-10-30 23:04:20,177 INFO sqlalchemy.engine.Engine [generated in 0.00039s] ()
+2026-10-30 23:04:20,188 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT technicians.id AS technicians_id, technicians.name AS technicians_name, technicians.status AS technicians_status, technicians.current_location AS technicians_current_location, technicians.shift_start AS technicians_shift_start, technicians.shift_end AS technicians_shift_end, technicians.created_at AS technicians_created_at, technicians.updated_at AS technicians_updated_at 
+FROM technicians) AS anon_1
+2026-10-30 23:04:20,188 INFO sqlalchemy.engine.Engine [generated in 0.00042s] ()
+2026-10-30 23:04:20,191 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT skills.id AS skills_id, skills.name AS skills_name, skills.description AS skills_description 
+FROM skills) AS anon_1
+2026-10-30 23:04:20,191 INFO sqlalchemy.engine.Engine [generated in 0.00019s] ()
+2026-10-30 23:04:20,195 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT service_zones.id AS service_zones_id, service_zones.name AS service_zones_name, service_zones.description AS service_zones_description 
+FROM service_zones) AS anon_1
+2026-10-30 23:04:20,195 INFO sqlalchemy.engine.Engine [generated in 0.00026s] ()
+[SUCCESS] Database query successful!
+  Current Jobs: 114
+  Current Technicians: 25
+  Current Skills: 11
+  Current Service Zones: 6
+
+TEST 3: Creating new job directly in database...
+----------------------------------------------------------------------
+2026-10-30 23:04:20,198 INFO sqlalchemy.engine.Engine SELECT service_zones.id AS service_zones_id, service_zones.name AS service_zones_name, service_zones.description AS service_zones_description 
+FROM service_zones
+ LIMIT ? OFFSET ?
+2026-10-30 23:04:20,198 INFO sqlalchemy.engine.Engine [generated in 0.00028s] (1, 0)
+2026-10-30 23:04:20,201 INFO sqlalchemy.engine.Engine SELECT skills.id AS skills_id, skills.name AS skills_name, skills.description AS skills_description 
+FROM skills
+ LIMIT ? OFFSET ?
+2026-10-30 23:04:20,201 INFO sqlalchemy.engine.Engine [generated in 0.00025s] (1, 0)
+2026-10-30 23:04:20,206 INFO sqlalchemy.engine.Engine INSERT INTO jobs (id, title, description, location, service_zone_id, duration_minutes, time_window_start, time_window_end, sla_deadline, priority, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-10-30 23:04:20,206 INFO sqlalchemy.engine.Engine [generated in 0.00070s] ('1f7d14da-eb7d-4546-bf88-34ff1dd0d707', 'Direct DB Test Job', 'Testing direct database insertion', '999 Database Test Street', '9b3c5b0b-7f1d-4f9a-9533-7ef01a8a35be', 90, '2026-10-31 09:00:00.000000', '2026-10-31 16:00:00.000000', '2026-10-31 17:00:00.000000', 'MEDIUM', 'PENDING', '2026-10-30 17:34:20.206250', '2026-10-30 17:34:20.206256')
+2026-10-30 23:04:20,215 INFO sqlalchemy.engine.Engine INSERT INTO job_skills (job_id, skill_id) VALUES (?, ?)
+2026-10-30 23:04:20,216 INFO sqlalchemy.engine.Engine [generated in 0.00054s] ('1f7d14da-eb7d-4546-bf88-34ff1dd0d707', 'e5b8eec8-d937-406a-9509-095efc205da2')
+2026-10-30 23:04:20,217 INFO sqlalchemy.engine.Engine COMMIT
+2026-10-30 23:04:20,229 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-30 23:04:20,233 INFO sqlalchemy.engine.Engine SELECT jobs.id, jobs.title, jobs.description, jobs.location, jobs.service_zone_id, jobs.duration_minutes, jobs.time_window_start, jobs.time_window_end, jobs.sla_deadline, jobs.priority, jobs.status, jobs.created_at, jobs.updated_at 
+FROM jobs 
+WHERE jobs.id = ?
+2026-10-30 23:04:20,233 INFO sqlalchemy.engine.Engine [generated in 0.00042s] ('1f7d14da-eb7d-4546-bf88-34ff1dd0d707',)
+[SUCCESS] Job created with ID: 1f7d14da-eb7d-4546-bf88-34ff1dd0d707
+  Title: Direct DB Test Job
+  Status: pending
+  Priority: medium
+2026-10-30 23:04:20,238 INFO sqlalchemy.engine.Engine SELECT service_zones.id, service_zones.name, service_zones.description 
+FROM service_zones 
+WHERE service_zones.id = ?
+2026-10-30 23:04:20,238 INFO sqlalchemy.engine.Engine [generated in 0.00026s] ('9b3c5b0b-7f1d-4f9a-9533-7ef01a8a35be',)
+  Service Zone: Downtown
+2026-10-30 23:04:20,255 INFO sqlalchemy.engine.Engine SELECT skills.id, skills.name, skills.description 
+FROM skills, job_skills 
+WHERE ? = job_skills.job_id AND skills.id = job_skills.skill_id
+2026-10-30 23:04:20,255 INFO sqlalchemy.engine.Engine [generated in 0.00033s] ('1f7d14da-eb7d-4546-bf88-34ff1dd0d707',)
+  Skills: 1
+
+TEST 4: Fetching created job from database...
+----------------------------------------------------------------------
+2026-10-30 23:04:20,257 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-30 23:04:20,258 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-30 23:04:20,260 INFO sqlalchemy.engine.Engine SELECT jobs.id AS jobs_id, jobs.title AS jobs_title, jobs.description AS jobs_description, jobs.location AS jobs_location, jobs.service_zone_id AS jobs_service_zone_id, jobs.duration_minutes AS jobs_duration_minutes, jobs.time_window_start AS jobs_time_window_start, jobs.time_window_end AS jobs_time_window_end, jobs.sla_deadline AS jobs_sla_deadline, jobs.priority AS jobs_priority, jobs.status AS jobs_status, jobs.created_at AS jobs_created_at, jobs.updated_at AS jobs_updated_at 
+FROM jobs 
+WHERE jobs.id = ?
+ LIMIT ? OFFSET ?
+2026-10-30 23:04:20,260 INFO sqlalchemy.engine.Engine [generated in 0.00022s] ('1f7d14da-eb7d-4546-bf88-34ff1dd0d707', 1, 0)
+[SUCCESS] Job retrieved successfully!
+  ID: 1f7d14da-eb7d-4546-bf88-34ff1dd0d707
+  Title: Direct DB Test Job
+  Description: Testing direct database insertion
+  Location: 999 Database Test Street
+  Status: pending
+  Priority: medium
+  Duration: 90 minutes
+  Service Zone ID: 9b3c5b0b-7f1d-4f9a-9533-7ef01a8a35be
+  Created At: 2026-10-30 17:34:20.206250
+
+  [VERIFIED] Title matches!
+  [VERIFIED] Location matches!
+  [VERIFIED] Duration matches!
+  [VERIFIED] Status matches!
+
+TEST 5: Fetching job with relationships...
+----------------------------------------------------------------------
+2026-10-30 23:04:20,268 INFO sqlalchemy.engine.Engine SELECT anon_1.jobs_id AS anon_1_jobs_id, anon_1.jobs_title AS anon_1_jobs_title, anon_1.jobs_description AS anon_1_jobs_description, anon_1.jobs_location AS anon_1_jobs_location, anon_1.jobs_service_zone_id AS anon_1_jobs_service_zone_id, anon_1.jobs_duration_minutes AS anon_1_jobs_duration_minutes, anon_1.jobs_time_window_start AS anon_1_jobs_time_window_start, anon_1.jobs_time_window_end AS anon_1_jobs_time_window_end, anon_1.jobs_sla_deadline AS anon_1_jobs_sla_deadline, anon_1.jobs_priority AS anon_1_jobs_priority, anon_1.jobs_status AS anon_1_jobs_status, anon_1.jobs_created_at AS anon_1_jobs_created_at, anon_1.jobs_updated_at AS anon_1_jobs_updated_at, service_zones_1.id AS service_zones_1_id, service_zones_1.name AS service_zones_1_name, service_zones_1.description AS service_zones_1_description, skills_1.id AS skills_1_id, skills_1.name AS skills_1_name, skills_1.description AS skills_1_description 
+FROM (SELECT jobs.id AS jobs_id, jobs.title AS jobs_title, jobs.description AS jobs_description, jobs.location AS jobs_location, jobs.service_zone_id AS jobs_service_zone_id, jobs.duration_minutes AS jobs_duration_minutes, jobs.time_window_start AS jobs_time_window_start, jobs.time_window_end AS jobs_time_window_end, jobs.sla_deadline AS jobs_sla_deadline, jobs.priority AS jobs_priority, jobs.status AS jobs_status, jobs.created_at AS jobs_created_at, jobs.updated_at AS jobs_updated_at 
+FROM jobs 
+WHERE jobs.id = ?
+ LIMIT ? OFFSET ?) AS anon_1 LEFT OUTER JOIN service_zones AS service_zones_1 ON service_zones_1.id = anon_1.jobs_service_zone_id LEFT OUTER JOIN (job_skills AS job_skills_1 JOIN skills AS skills_1 ON skills_1.id = job_skills_1.skill_id) ON anon_1.jobs_id = job_skills_1.job_id
+2026-10-30 23:04:20,268 INFO sqlalchemy.engine.Engine [generated in 0.00032s] ('1f7d14da-eb7d-4546-bf88-34ff1dd0d707', 1, 0)
+[SUCCESS] Job with relationships loaded!
+  Job ID: 1f7d14da-eb7d-4546-bf88-34ff1dd0d707
+  Service Zone: Downtown
+  Required Skills: 1
+    - Plumbing
+
+TEST 6: Listing all jobs...
+----------------------------------------------------------------------
+2026-10-30 23:04:20,272 INFO sqlalchemy.engine.Engine SELECT jobs.id AS jobs_id, jobs.title AS jobs_title, jobs.description AS jobs_description, jobs.location AS jobs_location, jobs.service_zone_id AS jobs_service_zone_id, jobs.duration_minutes AS jobs_duration_minutes, jobs.time_window_start AS jobs_time_window_start, jobs.time_window_end AS jobs_time_window_end, jobs.sla_deadline AS jobs_sla_deadline, jobs.priority AS jobs_priority, jobs.status AS jobs_status, jobs.created_at AS jobs_created_at, jobs.updated_at AS jobs_updated_at 
+FROM jobs
+ LIMIT ? OFFSET ?
+2026-10-30 23:04:20,272 INFO sqlalchemy.engine.Engine [generated in 0.00024s] (5, 0)
+[SUCCESS] Retrieved 5 jobs (showing first 5):
+  - ID: de662bb9-e2a7-45ea-8a2a-fe810fb8d7db | Install new door | Status: assigned | Priority: high
+  - ID: d5a0e879-9b8d-40ca-958a-71b0fbfb3ec1 | Service HVAC system | Status: assigned | Priority: critical
+  - ID: 2b6d5b4c-0db0-414f-afb9-28a363aa620c | Fix leaking faucet | Status: assigned | Priority: medium
+  - ID: fb2ab573-0f2f-492c-971d-1ea8b68d3a1e | Replace door lock | Status: assigned | Priority: medium
+  - ID: b6218f86-bc80-4f83-b5bc-22c24a20084b | Install new door | Status: assigned | Priority: low
+
+TEST 7: Updating job in database...
+----------------------------------------------------------------------
+2026-10-30 23:04:20,273 INFO sqlalchemy.engine.Engine SELECT jobs.id AS jobs_id, jobs.title AS jobs_title, jobs.description AS jobs_description, jobs.location AS jobs_location, jobs.service_zone_id AS jobs_service_zone_id, jobs.duration_minutes AS jobs_duration_minutes, jobs.time_window_start AS jobs_time_window_start, jobs.time_window_end AS jobs_time_window_end, jobs.sla_deadline AS jobs_sla_deadline, jobs.priority AS jobs_priority, jobs.status AS jobs_status, jobs.created_at AS jobs_created_at, jobs.updated_at AS jobs_updated_at 
+FROM jobs 
+WHERE jobs.id = ?
+ LIMIT ? OFFSET ?
+2026-10-30 23:04:20,274 INFO sqlalchemy.engine.Engine [cached since 0.01405s ago] ('1f7d14da-eb7d-4546-bf88-34ff1dd0d707', 1, 0)
+2026-10-30 23:04:20,276 INFO sqlalchemy.engine.Engine UPDATE jobs SET description=?, priority=?, updated_at=? WHERE jobs.id = ?
+2026-10-30 23:04:20,276 INFO sqlalchemy.engine.Engine [generated in 0.00042s] ('UPDATED: Testing direct database insertion', 'HIGH', '2026-10-30 17:34:20.276194', '1f7d14da-eb7d-4546-bf88-34ff1dd0d707')
+2026-10-30 23:04:20,282 INFO sqlalchemy.engine.Engine COMMIT
+2026-10-30 23:04:20,293 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-30 23:04:20,293 INFO sqlalchemy.engine.Engine SELECT jobs.id, jobs.title, jobs.description, jobs.location, jobs.service_zone_id, jobs.duration_minutes, jobs.time_window_start, jobs.time_window_end, jobs.sla_deadline, jobs.priority, jobs.status, jobs.created_at, jobs.updated_at 
+FROM jobs 
+WHERE jobs.id = ?
+2026-10-30 23:04:20,293 INFO sqlalchemy.engine.Engine [cached since 0.06081s ago] ('1f7d14da-eb7d-4546-bf88-34ff1dd0d707',)
+[SUCCESS] Job updated!
+  Priority changed: medium -> high
+  Description: UPDATED: Testing direct database insertion...
+
+TEST 8: Verifying update persisted...
+----------------------------------------------------------------------
+2026-10-30 23:04:20,295 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-30 23:04:20,296 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-30 23:04:20,297 INFO sqlalchemy.engine.Engine SELECT jobs.id AS jobs_id, jobs.title AS jobs_title, jobs.description AS jobs_description, jobs.location AS jobs_location, jobs.service_zone_id AS jobs_service_zone_id, jobs.duration_minutes AS jobs_duration_minutes, jobs.time_window_start AS jobs_time_window_start, jobs.time_window_end AS jobs_time_window_end, jobs.sla_deadline AS jobs_sla_deadline, jobs.priority AS jobs_priority, jobs.status AS jobs_status, jobs.created_at AS jobs_created_at, jobs.updated_at AS jobs_updated_at 
+FROM jobs 
+WHERE jobs.id = ?
+ LIMIT ? OFFSET ?
+2026-10-30 23:04:20,298 INFO sqlalchemy.engine.Engine [cached since 0.03799s ago] ('1f7d14da-eb7d-4546-bf88-34ff1dd0d707', 1, 0)
+[SUCCESS] Update persisted correctly!
+  Priority is now: high
+  Description starts with 'UPDATED': True
+
+TEST 9: Final job count verification...
+----------------------------------------------------------------------
+2026-10-30 23:04:20,300 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT jobs.id AS jobs_id, jobs.title AS jobs_title, jobs.description AS jobs_description, jobs.location AS jobs_location, jobs.service_zone_id AS jobs_service_zone_id, jobs.duration_minutes AS jobs_duration_minutes, jobs.time_window_start AS jobs_time_window_start, jobs.time_window_end AS jobs_time_window_end, jobs.sla_deadline AS jobs_sla_deadline, jobs.priority AS jobs_priority, jobs.status AS jobs_status, jobs.created_at AS jobs_created_at, jobs.updated_at AS jobs_updated_at 
+FROM jobs) AS anon_1
+2026-10-30 23:04:20,301 INFO sqlalchemy.engine.Engine [cached since 0.124s ago] ()
+[SUCCESS] Job count query successful!
+  Initial count: 114
+  Final count: 115
+  Jobs added: 1
+
+  [VERIFIED] New job persisted in database!
+
+2026-10-30 23:04:20,302 INFO sqlalchemy.engine.Engine ROLLBACK
+======================================================================
+SUMMARY OF ALL TESTS
+======================================================================
+
+[1] Database Connection:        [SUCCESS]
+[2] Existing Data Query:        [SUCCESS]
+[3] Create Job (INSERT):        [SUCCESS]
+[4] Fetch Job (SELECT):         [SUCCESS]
+[5] Fetch with Relationships:   [SUCCESS]
+[6] List Jobs:                  [SUCCESS]
+[7] Update Job (UPDATE):        [SUCCESS]
+[8] Verify Update Persisted:    [SUCCESS]
+[9] Count Verification:         [SUCCESS]
+
+======================================================================
+RESULT: ALL DATABASE OPERATIONS WORKING CORRECTLY!
+======================================================================
+
+Data is being:
+  [OK] Stored in database without errors
+  [OK] Fetched from database without errors
+  [OK] Updated in database successfully
+  [OK] Persisted correctly across sessions
+  [OK] Relationships loaded properly
+
+======================================================================
+

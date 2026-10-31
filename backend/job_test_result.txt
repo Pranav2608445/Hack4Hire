@@ -1,0 +1,10 @@
+python : Traceback (most recent call last):
+At line:1 char:66
++ ... ktop\Hackathon_Project\backend" ; python test_job_api.py 2>&1 | Out-F ...
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\sathe\OneDrive\Desktop\Hackathon_Project\backend\test_job_api.py", line 5, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'

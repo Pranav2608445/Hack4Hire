@@ -1,0 +1,101 @@
+
+======================================================================
+DISPATCHGRID AUTOMATED BACKEND TESTING
+======================================================================
+
+STEP 1: Installing dependencies...
+----------------------------------------------------------------------
+Installing fastapi... [OK]
+Installing uvicorn[standard]... [OK]
+Installing sqlalchemy... [OK]
+Installing pydantic... [OK]
+Installing pydantic-settings... [OK]
+Installing python-dotenv... [OK]
+
+STEP 2: Verifying imports...
+----------------------------------------------------------------------
+[OK] All core packages imported successfully
+
+STEP 3: Testing application imports...
+----------------------------------------------------------------------
+[OK] Config and database modules OK
+[OK] All scheduler modules OK
+
+STEP 4: Seeding database...
+----------------------------------------------------------------------
+2026-10-30 19:00:09,897 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-30 19:00:09,925 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT jobs.id AS jobs_id, jobs.title AS jobs_title, jobs.description AS jobs_description, jobs.location AS jobs_location, jobs.service_zone_id AS jobs_service_zone_id, jobs.duration_minutes AS jobs_duration_minutes, jobs.time_window_start AS jobs_time_window_start, jobs.time_window_end AS jobs_time_window_end, jobs.sla_deadline AS jobs_sla_deadline, jobs.priority AS jobs_priority, jobs.status AS jobs_status, jobs.created_at AS jobs_created_at, jobs.updated_at AS jobs_updated_at 
+FROM jobs) AS anon_1
+2026-10-30 19:00:09,925 INFO sqlalchemy.engine.Engine [generated in 0.00065s] ()
+2026-10-30 19:00:09,931 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT technicians.id AS technicians_id, technicians.name AS technicians_name, technicians.status AS technicians_status, technicians.current_location AS technicians_current_location, technicians.shift_start AS technicians_shift_start, technicians.shift_end AS technicians_shift_end, technicians.created_at AS technicians_created_at, technicians.updated_at AS technicians_updated_at 
+FROM technicians) AS anon_1
+2026-10-30 19:00:09,932 INFO sqlalchemy.engine.Engine [generated in 0.00026s] ()
+[OK] Database already seeded: 25 technicians, 110 jobs
+2026-10-30 19:00:09,932 INFO sqlalchemy.engine.Engine ROLLBACK
+
+STEP 5: Running scheduling algorithms...
+======================================================================
+2026-10-30 19:00:09,935 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-30 19:00:09,944 INFO sqlalchemy.engine.Engine SELECT jobs.id AS jobs_id, jobs.title AS jobs_title, jobs.description AS jobs_description, jobs.location AS jobs_location, jobs.service_zone_id AS jobs_service_zone_id, jobs.duration_minutes AS jobs_duration_minutes, jobs.time_window_start AS jobs_time_window_start, jobs.time_window_end AS jobs_time_window_end, jobs.sla_deadline AS jobs_sla_deadline, jobs.priority AS jobs_priority, jobs.status AS jobs_status, jobs.created_at AS jobs_created_at, jobs.updated_at AS jobs_updated_at, service_zones_1.id AS service_zones_1_id, service_zones_1.name AS service_zones_1_name, service_zones_1.description AS service_zones_1_description, skills_1.id AS skills_1_id, skills_1.name AS skills_1_name, skills_1.description AS skills_1_description 
+FROM jobs LEFT OUTER JOIN service_zones AS service_zones_1 ON service_zones_1.id = jobs.service_zone_id LEFT OUTER JOIN (job_skills AS job_skills_1 JOIN skills AS skills_1 ON skills_1.id = job_skills_1.skill_id) ON jobs.id = job_skills_1.job_id
+2026-10-30 19:00:09,945 INFO sqlalchemy.engine.Engine [generated in 0.00052s] ()
+2026-10-30 19:00:09,964 INFO sqlalchemy.engine.Engine SELECT technicians.id AS technicians_id, technicians.name AS technicians_name, technicians.status AS technicians_status, technicians.current_location AS technicians_current_location, technicians.shift_start AS technicians_shift_start, technicians.shift_end AS technicians_shift_end, technicians.created_at AS technicians_created_at, technicians.updated_at AS technicians_updated_at, skills_1.id AS skills_1_id, skills_1.name AS skills_1_name, skills_1.description AS skills_1_description, service_zones_1.id AS service_zones_1_id, service_zones_1.name AS service_zones_1_name, service_zones_1.description AS service_zones_1_description, availability_blocks_1.id AS availability_blocks_1_id, availability_blocks_1.technician_id AS availability_blocks_1_technician_id, availability_blocks_1.start_time AS availability_blocks_1_start_time, availability_blocks_1.end_time AS availability_blocks_1_end_time, availability_blocks_1.reason AS availability_blocks_1_reason, availability_blocks_1.created_at AS availability_blocks_1_created_at, availability_blocks_1.updated_at AS availability_blocks_1_updated_at 
+FROM technicians LEFT OUTER JOIN (technician_skills AS technician_skills_1 JOIN skills AS skills_1 ON skills_1.id = technician_skills_1.skill_id) ON technicians.id = technician_skills_1.technician_id LEFT OUTER JOIN (technician_zones AS technician_zones_1 JOIN service_zones AS service_zones_1 ON service_zones_1.id = technician_zones_1.service_zone_id) ON technicians.id = technician_zones_1.technician_id LEFT OUTER JOIN availability_blocks AS availability_blocks_1 ON technicians.id = availability_blocks_1.technician_id
+2026-10-30 19:00:09,965 INFO sqlalchemy.engine.Engine [generated in 0.00055s] ()
+python : Traceback (most recent call last):
+At line:1 char:1
++ python auto_test.py 2>&1 | Out-File -FilePath test_final.txt -Encodin ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\sathe\OneDrive\Desktop\Hackathon_Project\backend\auto_test.py", line 146, in <module>
+    results = engine.run_scheduling(
+        jobs=jobs,
+    ...<3 lines>...
+        algorithm="auto"
+    )
+  File "C:\Users\sathe\OneDrive\Desktop\Hackathon_Project\backend\app\scheduler\engine.py", line 63, in 
+run_scheduling
+    scheduling_run = SchedulingRun(
+        start_time=start_time,
+    ...<3 lines>...
+        total_technicians=len(technicians)
+    )
+  File "<sqlalchemy generated __init__ for class app.models.scheduling_run.SchedulingRun>", line 4, in __init__
+    return new_state._initialize_instance(self, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\sathe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-
+packages\Python313\site-packages\sqlalchemy\orm\state.py", line 597, in _initialize_instance
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\sathe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-
+packages\Python313\site-packages\sqlalchemy\util\langhelpers.py", line 166, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\Users\sathe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-
+packages\Python313\site-packages\sqlalchemy\orm\state.py", line 595, in _initialize_instance
+    manager.original_init(*mixed[1:], **kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sathe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-
+packages\Python313\site-packages\sqlalchemy\orm\decl_base.py", line 2361, in _declarative_constructor
+    raise TypeError(
+        "%r is an invalid keyword argument for %s" % (k, cls_.__name__)
+    )
+TypeError: 'start_time' is an invalid keyword argument for SchedulingRun
+
+[DATA] Dataset: 110 jobs, 25 technicians
+
+======================================================================
+
+============================================================
+DispatchGrid Scheduling Engine - Starting
+============================================================
+Jobs to schedule: 110
+Available technicians: 25
+Algorithm: auto
+============================================================
+
+
+[ERROR] Test failed: 'start_time' is an invalid keyword argument for SchedulingRun
