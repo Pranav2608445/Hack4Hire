@@ -165,64 +165,79 @@ In addition to real-time dispatch, DispatchGrid includes an optimization engine 
 
 ---
 
-## 🚀 Quick Start & Setup
+## 🚀 Quick Start & How to Run (Step-by-Step)
+
+To run the full stack locally, open **two terminal windows** in the project root:
+
+```
+┌──────────────────────────────────────┐     ┌──────────────────────────────────────┐
+│  TERMINAL 1: Backend (FastAPI :8000) │     │  TERMINAL 2: Frontend (Vite :3000)   │
+│  .\backend\START_V2.bat              │     │  cd frontend; npm run dev            │
+└──────────────────────────────────────┘     └──────────────────────────────────────┘
+```
 
 ### Prerequisites
 - **Python 3.10+** (tested through Python 3.13)
 - **Node.js 18+** & **npm**
-- **Git**
 
 ---
 
-### Backend Setup
+### Step 1: Start the Backend (Port 8000)
 
-#### Option A: One-Click Startup (Windows)
-Double-click or run from the project root:
+#### Option A: One-Click Script (Recommended for Windows)
+From the root directory, simply run:
 ```powershell
 .\backend\START_V2.bat
 ```
-*This activates the virtual environment, automatically runs database migrations and seed data, and launches the FastAPI server on port 8000.*
+*This automatically activates `venv`, seeds database test users/categories/SLA tiers, and boots FastAPI on `http://127.0.0.1:8000`.*
 
-#### Option B: Manual Startup
+#### Option B: Manual Command
 ```powershell
-# 1. Navigate to backend directory
 cd backend
-
-# 2. Activate virtual environment
 .\venv\Scripts\activate
 # (On macOS/Linux: source venv/bin/activate)
 
-# 3. Seed test users, categories, SLA tiers, and technicians
+# Seed database with test users, technicians, and categories
 python -m app.seed.v2_seed
 
-# 4. Start the server
+# Start backend server
 python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-> **Backend URLs:**
-> - API Base: `http://localhost:8000`
-> - Health Check: `http://localhost:8000/api/health`
-> - Swagger Interactive UI: `http://localhost:8000/docs`
-> - ReDoc: `http://localhost:8000/redoc`
+> **Backend Status Checks:**
+> - 🩺 Health Check: [http://localhost:8000/api/health](http://localhost:8000/api/health)
+> - 📖 Swagger UI Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+> - 📄 ReDoc: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
 ---
 
-### Frontend Setup
+### Step 2: Start the Frontend (Port 3000)
 
-In a separate terminal:
+In a **second terminal window**:
 ```powershell
-# 1. Navigate to frontend directory
 cd frontend
 
-# 2. Install dependencies (if not already installed)
+# Install packages (first time only)
 npm install
 
-# 3. Start Vite development server
+# Start Vite dev server
 npm.cmd run dev
 # (On macOS/Linux: npm run dev)
 ```
 
-Open **`http://localhost:3000`** in your browser.
+Now open **[http://localhost:3000](http://localhost:3000)** in your browser!
+
+---
+
+### Step 3: Quick 60-Second End-to-End Walkthrough
+
+1. Go to **[http://localhost:3000](http://localhost:3000)**.
+2. Click the **Customer Demo** pill on the login screen (fills `alice@example.com` / `Customer@1234`) and sign in.
+3. Select **AC Service**, view nearby moving technician pins on the map with live ETA, and click **Book Now**.
+4. In the top navbar, use the role switcher to switch to **Technician** (`raj.tech@example.com` / `Tech@1234`).
+5. Flip the **Online Toggle** — the incoming job offer modal pops up with a 60-second countdown!
+6. Click **Accept Offer**, test turn-by-turn navigation, click **En Route** → **Arrived** → **Complete Job**.
+7. Switch to **Admin** (`admin@dispatchgrid.dev` / `Admin@1234`) to view fleet KPIs, the Live Map, Jobs triage drawer, and Escalations inbox.
 
 ---
 
