@@ -1,505 +1,355 @@
-# DispatchGrid
+# DispatchGrid v2
 
-**Intelligent Workforce Scheduling & Recovery Engine**
+**Intelligent Workforce Scheduling, On-Demand Dispatch & Field Service Platform**
 
-*Current Status: Phase 7 Complete ✅ | 37% Progress | Disruption Handling & Recovery Operational*
+[![Status: Production Ready](https://img.shields.io/badge/Status-Complete%20%E2%9C%85-success)](https://github.com/Pranav2608445/Hack4Hire)
+[![Backend: FastAPI](https://img.shields.io/badge/Backend-FastAPI%20%7C%20Python-blue)](https://fastapi.tiangolo.com/)
+[![Frontend: React + Vite](https://img.shields.io/badge/Frontend-React%2018%20%7C%20TypeScript%20%7C%20Tailwind-61dafb)](https://vitejs.dev/)
+[![Database: SQLite](https://img.shields.io/badge/Database-SQLite%20%7C%20SQLAlchemy-lightgrey)](https://www.sqlite.org/)
 
-A constraint-aware workforce scheduling system that automatically assigns field-service jobs to eligible technicians, optimizes schedules, explains decisions, and recovers from disruptions.
-
-##  Project Overview
-
-DispatchGrid solves the manual scheduling problem for field-service companies by:
-
-- ✅ Automatically assigning jobs based on skills, zones, availability, and constraints
-- ✅ Optimizing schedules to minimize travel time, SLA violations, and unassigned work
-- ✅ Explaining every assignment decision with actionable reasons
-- ✅ Recovering from disruptions (technician unavailable, urgent jobs, etc.)
-- ✅ Maintaining complete audit trail of all scheduling decisions
-
-##  Architecture
-
-**Backend**: Python + FastAPI + SQLAlchemy + SQLite  
-**Frontend**: React + TypeScript + Vite + Tailwind CSS  
-**Scheduling Engine**: Hybrid CSP + Greedy + Local Search algorithm
-
-### System Components
-
-```
-┌─────────────────────────────────────────┐
-│  Frontend (React + TypeScript)          │
-│  - Dashboard & Visualizations           │
-│  - Job & Technician Management          │
-│  - Schedule Timeline                    │
-└─────────────────┬───────────────────────┘
-                  │ REST API
-┌─────────────────┴───────────────────────┐
-│  Backend (FastAPI + Python)             │
-│  - API Layer                            │
-│  - Domain Services                      │
-│  - Scheduling Engine                   │
-│  - Constraint Validator                 │
-│  - Recovery Engine                      │
-└─────────────────┬───────────────────────┘
-                  │
-┌─────────────────┴───────────────────────┐
-│  Database (SQLite)                      │
-│  - Jobs, Technicians, Assignments       │
-│  - Scheduling Runs & Decisions          │
-│  - Audit Trail                          │
-└─────────────────────────────────────────┘
-```
-
-## 🚀 New in Phase 5 & 6: Intelligent Scheduling
-
-### Greedy Insertion with Least Flexible Job First (LFJ)
-Efficient initial schedule generation that prioritizes hard-to-place jobs:
-- **85-95% job coverage** in 1-3 seconds
-- Multi-factor prioritization (priority, flexibility, time windows, skills)
-- Full constraint validation (10 hard constraints)
-- Detailed tracking of unassigned jobs with reasons
-
-### ALNS (Adaptive Large Neighborhood Search) Optimization
-Advanced metaheuristic for schedule refinement:
-- **2-5% improvement** over greedy baseline
-- 4 destroy operators × 3 repair operators = 12 optimization strategies
-- Simulated Annealing with adaptive operator selection
-- Reduces travel time, idle time, and improves job coverage
-
-### Complete API & Testing
-- **5 REST endpoints** for scheduling execution and analysis
-- Comprehensive test suite with 4 test scenarios
-- Algorithm comparison reporting
-- Full Swagger/OpenAPI documentation
-
-📚 **See:** `PHASE_5_6_COMPLETE.md` for detailed implementation guide
-
-##  Quick Start
-
-### Prerequisites
-
-- Python 3.11 or higher
-- Node.js 18+ and npm (for frontend)
-- Git
-
-### Installation
-
-**1. Clone the repository:**
-```bash
-cd Hackathon_Project
-```
-
-**2. Backend Setup:**
-```bash
-cd backend
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# Windows:
-venv\Scripts\activate
-# Linux/Mac:
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Copy environment file
-copy .env.example .env
-
-# Seed the database (25 technicians, 110 jobs)
-python -m app.seed_data
-
-# Run the backend
-python -m uvicorn app.main:app --reload
-```
-
-Backend will be available at: `http://localhost:8000`
-
-**3. Test Scheduling Algorithms:**
-```bash
-# Quick verification (checks imports)
-python quick_verify.py
-
-# Full test suite (tests Greedy + ALNS)
-python test_scheduling.py
-
-# Or test via API
-curl -X POST "http://localhost:8000/api/scheduling/run" \
-  -H "Content-Type: application/json" \
-  -d '{"algorithm": "auto", "max_iterations": 100}'
-```
-
-**4. Frontend Setup** (in a new terminal):
-```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Run the frontend
-npm run dev
-```
-
-Frontend will be available at: `http://localhost:3000`
-
-### Verify Installation
-
-1. Open `http://localhost:8000` - Should see API info
-2. Open `http://localhost:8000/api/health` - Should return health status
-3. Open `http://localhost:8000/docs` - Interactive API documentation
-4. Open `http://localhost:3000` - Should see DispatchGrid dashboard
-
-##  Project Status
-
-**Overall Progress:** 32% Complete (Phases 1-6 Done) 🚀
-
-### ✅ Phase 1: Requirements & Architecture (COMPLETE)
-- [x] Complete requirement analysis
-- [x] System architecture design
-- [x] Database schema design
-- [x] API design
-- [x] Scheduling algorithm specification
-
-### ✅ Phase 2: Project Setup (COMPLETE)
-- [x] Backend structure created
-- [x] Frontend structure created
-- [x] Configuration files
-- [x] Health check endpoints
-- [x] Database connection
-
-### ✅ Phase 3: Job & Technician Management (COMPLETE)
-- [x] Database models (11 models)
-- [x] CRUD APIs (Jobs, Technicians, Skills, Zones)
-- [x] Pydantic schemas and validation
-- [x] Domain services
-
-### ✅ Phase 4: Seed Data & Utilities (COMPLETE)
-- [x] Travel matrix (6 zones with realistic travel times)
-- [x] Time utilities (interval checking, overlap detection)
-- [x] Seed data generator (25 technicians, 110 jobs)
-
-### ✅ Phase 5: Greedy Insertion Algorithm (COMPLETE) ⭐ NEW
-- [x] Least Flexible Job First (LFJ) prioritization
-- [x] Multi-factor scoring system
-- [x] Constraint validation integration (HC1-HC10)
-- [x] 85-95% job coverage in 1-3 seconds
-- [x] Detailed unassigned job tracking
-
-### ✅ Phase 6: ALNS Optimization (COMPLETE) ⭐ NEW
-- [x] Adaptive Large Neighborhood Search metaheuristic
-- [x] 4 destroy operators (Random, Worst, Related, Technician)
-- [x] 3 repair operators (Greedy, Regret-2, Priority)
-- [x] Simulated Annealing acceptance
-- [x] Adaptive operator weight updates
-- [x] 2-5% improvement over Greedy
-
-### ✅ Scheduling Engine & API (COMPLETE) ⭐ NEW
-- [x] Unified orchestration engine
-- [x] Algorithm comparison & reporting
-- [x] REST API endpoints (run, list, get, delete, compare)
-- [x] Database persistence (SchedulingRun, SchedulingDecision)
-- [x] Comprehensive test suite
-- [x] Complete API documentation
-
-###  Upcoming Phases
-- Phase 7: Real-time Disruption Handling
-- Phase 8: Re-optimization & Rescheduling
-- Phase 9: Interactive Dashboard
-- Phase 10: Historical Analytics & Reporting
-- Phase 11-13: Frontend Development
-- Phase 14: Integration Testing
-- Phase 15: Documentation & Demo
-
-##  Project Structure
-
-```
-dispatchgrid/
-├── backend/
-│   ├── app/
-│   │   ├── api/                    # API routes
-│   │   ├── models/                 # Database models
-│   │   ├── schemas/                # Pydantic schemas
-│   │   ├── services/               # Business logic
-│   │   ├── scheduler/              # Scheduling engine 
-│   │   │   ├── engine.py           # Main algorithm
-│   │   │   ├── constraints.py      # Hard constraints
-│   │   │   ├── scoring.py          # Objective function
-│   │   │   ├── optimizer.py        # Local search
-│   │   │   └── recovery.py         # Disruption recovery
-│   │   ├── utils/                  # Utilities
-│   │   └── seed/                   # Seed data
-│   ├── tests/                      # Test suite
-│   ├── alembic/                    # Database migrations
-│   ├── requirements.txt
-│   └── .env.example
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/             # React components
-│   │   ├── services/               # API clients
-│   │   ├── types/                  # TypeScript types
-│   │   └── hooks/                  # Custom hooks
-│   ├── package.json
-│   └── vite.config.ts
-│
-├── docs/                           # Documentation
-└── README.md
-```
-
-##  Scheduling Algorithm
-
-**Current Implementation**: Greedy Insertion (LFJ) + ALNS Optimization ⭐
-
-### Phase 5: Greedy Insertion with Least Flexible Job First
-
-**Strategy:**
-1. **Job Prioritization** (LFJ):
-   - Priority level (URGENT → HIGH → MEDIUM → LOW)
-   - Flexibility score (fewer eligible technicians = higher priority)
-   - Time window tightness (narrower windows first)
-   - Required skills count
-   
-2. **Insertion Process**:
-   - For each job, find all eligible technicians
-   - Try insertion at various time slots (before, between, after)
-   - Validate against all hard constraints
-   - Calculate insertion cost with multi-factor scoring
-   - Select position with lowest cost
-
-3. **Performance**: 85-95% job coverage in 1-3 seconds
-
-### Phase 6: ALNS (Adaptive Large Neighborhood Search)
-
-**Strategy:**
-1. Start with Greedy solution as initial solution
-2. **Destroy Phase**: Remove 5-20 jobs using selected operator:
-   - Random removal
-   - Worst cost removal
-   - Related jobs (same zone/time)
-   - Technician-based (all from one tech)
-   
-3. **Repair Phase**: Re-insert removed jobs using selected operator:
-   - Greedy insertion
-   - Regret-2 based
-   - Priority-aware
-   
-4. **Acceptance**: Simulated Annealing criterion
-5. **Adaptation**: Update operator weights based on performance
-6. **Performance**: 2-5% improvement over Greedy in 10-15 seconds
-
-### Hard Constraints (Never Violated)
-1. ✅ Skill Match - Technician must have all required skills
-2. ✅ Zone Eligibility - Technician must be allowed in service zone
-3. ✅ Availability - No unavailable periods during assignment
-4. ✅ Shift Boundary - Work must fit within technician shift
-5. ✅ Time Window - Job must start within allowed window
-6. ✅ No Overlap - No overlapping assignments
-7. ✅ Travel Time - Sufficient time between consecutive jobs
-8. ✅ SLA Deadline - Completion must meet SLA requirements
-9. ✅ Protected Completed Work - Completed jobs are immutable
-10. ✅ Protected In-Progress Work - In-progress jobs protected during recovery
-
-### Optimization Objectives (Minimized)
-- SLA violations and late jobs
-- Total travel time
-- Unassigned high-priority jobs
-- Overtime (where supported)
-- Unnecessary changes to existing assignments
-- Workload imbalance across technicians
-
-### Algorithm Flow
-```
-1. Validate & normalize input data
-2. Freeze completed and in-progress work
-3. Prioritize jobs (priority → SLA → time window → ID)
-4. For each job:
-   a. Generate feasible technician/time-slot candidates
-   b. Validate ALL hard constraints
-   c. Score candidates using objective function
-   d. Select lowest-cost candidate
-   e. If none feasible, record specific reason
-5. Run local search optimization (bounded iterations)
-6. Persist schedule, metrics, and explanations atomically
-```
-
-## 📊 Algorithm Performance
-
-Based on seed data (25 technicians, 110 jobs):
-
-| Algorithm | Job Coverage | Execution Time | Score | Travel Time | Idle Time |
-|-----------|-------------|----------------|-------|-------------|-----------|
-| **Greedy (LFJ)** | 85-95% | 1-3 seconds | 8,320 | 1,320 min | 420 min |
-| **ALNS** | 90-98% | 10-15 seconds | 8,542 (+2.7%) | 1,250 min (-5%) | 340 min (-19%) |
-| **Combined** | **90-98%** | **12-18 seconds** | **+5-10% vs random** | **Optimized** | **Optimized** |
-
-**Key Improvements with ALNS:**
-- ✅ 3-5 more jobs assigned
-- ✅ 2-5% higher total score
-- ✅ 5-10% reduction in travel time
-- ✅ 10-19% reduction in idle time
-- ✅ 98%+ high-priority job fulfillment
-
-##  Configuration
-
-Edit `backend/.env` to configure:
-
-```bash
-# Database
-DATABASE_URL=sqlite:///./dispatchgrid.db
-
-# Scheduling Parameters
-SCHEDULE_TIME_SLOT_INTERVAL_MINUTES=15
-SCHEDULE_LOCAL_SEARCH_ITERATIONS=10
-
-# Objective Function Weights
-WEIGHT_SLA_PENALTY=100
-WEIGHT_TRAVEL_TIME=1
-WEIGHT_UNASSIGNED_PRIORITY=50
-WEIGHT_OVERTIME=10
-WEIGHT_CHURN=20
-WEIGHT_WORKLOAD_IMBALANCE=5
-```
-
-##  Testing
-
-```bash
-cd backend
-
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=app --cov-report=html
-
-# Run specific test categories
-pytest -m unit          # Unit tests only
-pytest -m integration   # Integration tests only
-```
-
-##  API Documentation
-
-Once the backend is running, visit:
-- **Interactive API Docs (Swagger)**: `http://localhost:8000/docs`
-- **Alternative Docs (ReDoc)**: `http://localhost:8000/redoc`
-- **Detailed Scheduling API**: See `backend/API_SCHEDULING.md`
-
-### Key Endpoints
-
-**Job & Technician Management:**
-- `POST /api/jobs` - Create job
-- `GET /api/jobs` - List jobs
-- `GET /api/jobs/{id}` - Get job details
-- `POST /api/technicians` - Create technician
-- `GET /api/technicians` - List technicians
-- `POST /api/skills` - Create skill
-- `POST /api/service-zones` - Create service zone
-
-**Scheduling (Phase 5 & 6):** ⭐ NEW
-- `POST /api/scheduling/run` - Execute Greedy and/or ALNS scheduling
-- `GET /api/scheduling/runs` - List scheduling runs
-- `GET /api/scheduling/runs/{id}` - Get run details with assignments
-- `DELETE /api/scheduling/runs/{id}` - Delete a run
-- `GET /api/scheduling/compare/{id1}/vs/{id2}` - Compare two runs
-
-**Example: Run Full Scheduling**
-```bash
-curl -X POST "http://localhost:8000/api/scheduling/run" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "algorithm": "auto",
-    "use_alns": true,
-    "max_iterations": 100,
-    "destroy_size_min": 5,
-    "destroy_size_max": 20
-  }'
-```
-
-**Example Response:**
-```json
-{
-  "run_id": 1,
-  "status": "completed",
-  "algorithm": "auto",
-  "jobs_count": 110,
-  "technicians_count": 25,
-  "assigned_count": 105,
-  "unassigned_count": 5,
-  "execution_time": 12.45,
-  "metrics": {
-    "total_score": 8542.30,
-    "job_coverage": 95.5,
-    "total_travel_time": 1250.0,
-    "total_idle_time": 340.0,
-    "priority_fulfillment_rate": 98.2
-  },
-  "comparison": {
-    "assigned_jobs": {"greedy": 102, "alns": 105, "improvement": 3},
-    "total_score": {"greedy": 8320.50, "alns": 8542.30, "improvement_pct": 2.7}
-  }
-}
-```
-
-##  Requirements Met
-
-### From G2.pdf Problem Statement
-- ✅ Module A: Job and Technician Management
-- ✅ Module B: Scheduling Engine
-- ✅ Module C: Assignment Optimization
-- ✅ Module D: Disruption and Recovery
-- ✅ Module E: Explainability and Audit History
-- ✅ Module F: Dashboard
-- ✅ Module G: Reliability and Data Integrity
-
-### Data Requirements
-- ⏳ Seed dataset: 20+ technicians, 100+ jobs
-- ⏳ Multiple skills and service zones
-- ⏳ Conflicting time windows
-- ⏳ Unavailable periods
-- ⏳ Impossible jobs
-- ⏳ Disruption scenarios
-
-##  Evaluation Scenarios
-
-Will be tested in Phase 14:
-1. Highly skilled technician becomes unavailable
-2. Two high-priority jobs compete for same time slot
-3. Technician has skill but cannot reach before deadline
-4. Disruption occurs while job already in progress
-5. Same scheduling request submitted twice
-6. Two scheduling requests execute concurrently
-7. Job is impossible because no eligible technician exists
-
-##  Known Limitations
-
-*To be documented as features are implemented*
-
-##  Roadmap
-
-**Current Sprint**: Phase 3 - Database Models & CRUD APIs
-
-**Next Steps**:
-1. Create all database models
-2. Implement Job and Technician CRUD
-3. Add validation and state transitions
-4. Write comprehensive tests
-5. Generate seed data (20 techs, 100 jobs)
-6. Implement scheduling engine core
-
-## 👥 Development
-
-**Project Type**: Hackathon - Intelligent Workforce Scheduling System  
-**Stack**: Python/FastAPI + React/TypeScript  
-**Algorithm**: Hybrid CSP + Greedy + Local Search  
-**Focus**: Correctness, Explainability, Reliability
-
-## 📄 License
-
-Hackathon project - All rights reserved
+An enterprise-grade, Uber-style field-service automation platform that unifies **AI-driven schedule optimization**, **real-time on-demand matching & dispatch**, **SLA tracking**, and **three role-based frontends** (Customer, Technician, and Admin Console) into a single cohesive ecosystem.
 
 ---
 
-**Last Updated**: October 30, 2026  
-**Version**: 1.3.0  
-**Status**: Phase 6 Complete ✅ (32% Progress)  
-**Next Phase**: Disruption Handling & Re-optimization
+## 📑 Table of Contents
+
+- [System Architecture](#-system-architecture)
+- [Core Features & Frontends](#-core-features--frontends)
+  - [1. Customer App (Mobile-First)](#1-customer-app-mobile-first)
+  - [2. Technician App (Mobile-First Cockpit)](#2-technician-app-mobile-first-cockpit)
+  - [3. Admin Control Center (Desktop-First Console)](#3-admin-control-center-desktop-first-console)
+- [Intelligent Dispatch & Matching Engine](#-intelligent-dispatch--matching-engine)
+- [SLA Management Engine](#-sla-management-engine)
+- [Scheduling Optimization Engine (Phase 1–7)](#-scheduling-optimization-engine-phase-17)
+- [Quick Start & Setup](#-quick-start--setup)
+  - [Prerequisites](#prerequisites)
+  - [Backend Setup](#backend-setup)
+  - [Frontend Setup](#frontend-setup)
+- [Test Credentials](#-test-credentials)
+- [REST API Reference](#-rest-api-reference)
+- [Directory Structure](#-directory-structure)
+- [Button Wiring & UI Audit](#-button-wiring--ui-audit)
+- [License & Credits](#-license--credits)
+
+---
+
+## 🏛 System Architecture
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        CLIENT FRONTENDS (React 18)                     │
+│  ┌──────────────────────┬──────────────────────┬────────────────────┐  │
+│  │   Customer Portal    │  Technician Cockpit  │   Admin Console    │  │
+│  │  (Uber-style Maps,   │ (Online/Offline,     │ (Fleet Map, KPIs,  │  │
+│  │   Booking, Tracking) │  Offers, Navigation) │  SLA, Escalations) │  │
+│  └──────────────────────┴──────────────────────┴────────────────────┘  │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ Axios / REST / WebSocket
+┌───────────────────────────────────┴────────────────────────────────────┐
+│                       BACKEND API (FastAPI + Python)                   │
+│  ┌────────────────────┬────────────────────┬────────────────────────┐  │
+│  │  JWT Auth & RBAC   │  Customer Router   │   Technician Router    │  │
+│  ├────────────────────┼────────────────────┼────────────────────────┤  │
+│  │    Admin Router    │  Matching Engine   │  SLA Background Engine │  │
+│  ├────────────────────┼────────────────────┼────────────────────────┤  │
+│  │  Greedy LFJ Engine │  ALNS Optimizer    │  Disruption Recovery   │  │
+│  └────────────────────┴────────────────────┴────────────────────────┘  │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ SQLAlchemy ORM
+┌───────────────────────────────────┴────────────────────────────────────┐
+│                    DATABASE (SQLite: dispatchgrid.db)                  │
+│  Users, Customer & Tech Profiles, Service Requests, Offers, Ratings,  │
+│  Service Categories, SLA Tiers, Audit Logs, Scheduling Runs            │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🌟 Core Features & Frontends
+
+DispatchGrid v2 includes three complete, dedicated user interfaces sharing a unified warm terracotta and espresso design system (`#C2531F` / `#2B2118` / `#FFF8F2`), accessible focus rings, dark mode support, and strict WCAG AA contrast.
+
+### 1. Customer App (Mobile-First)
+- **Live Interactive Map**: Full-screen canvas vector map showing the customer's location with animated nearby moving technician pins, real-time ETAs, and distance calculations.
+- **Bottom Booking Sheet**:
+  - Service category selector with real-time base rates and price-per-minute estimates.
+  - Problem description & photo attachment upload preview.
+  - Urgency level selector (**Normal**, **Urgent**, **Emergency**) explaining response targets.
+  - Saved address book picker or current GPS coordinates.
+  - Dynamic price and arrival time preview.
+- **Live Radar Matching**: Pulse-animated *"Finding your technician..."* screen with cancellation option.
+- **Real-Time Job Tracking Cockpit**:
+  - 5-stage visual stepper: `Assigned` → `En route` → `Arrived` → `In progress` → `Completed`.
+  - Live technician profile card (photo, name, rating, phone).
+  - One-tap phone dialer (`tel:`) and in-app message modal.
+  - Self-service booking cancellation with confirmation modal.
+- **Post-Service Feedback**: 5-star rating selector, written review, and customizable technician tip ($0, $5, $10, custom).
+- **Profile & Saved Addresses**: Saved address management (add, edit, delete with confirmation) and past booking history with "Book Again" shortcuts.
+
+### 2. Technician App (Mobile-First Cockpit)
+- **Giant Availability Toggle**: One-tap Online/Offline toggle with an animated pulse ring updating fleet visibility and matching eligibility.
+- **Incoming Job Offer Modal**:
+  - Full-screen job alert with a 60-second animated countdown timer bar.
+  - Payout estimate, customer distance, urgency badge, and task scope.
+  - Instant **Accept** (claims exclusive assignment) or **Decline** with mandatory reason selection (forwarding to the next best technician).
+- **Active Job Cockpit**:
+  - **Turn-by-Turn Navigation**: One-click external Google Maps launch directed to customer coordinates.
+  - Single primary action button advancing the job lifecycle:
+    - `I'm En Route` → `Arrived at Location`
+    - `Save Diagnostic Note` (persists on-site field notes to the backend)
+    - `Complete Job` (confirms diagnostic proof and prompts for review)
+- **Earnings & Pay Analytics**: Daily and weekly income breakdowns, base pay vs. tips, and completed job counters.
+- **Technician Profile**: Service radius slider (5 km to 50 km), max concurrent jobs capacity (1 to 5), verified certification level, and customer review cards.
+
+### 3. Admin Control Center (Desktop-First Console)
+- **Deep Espresso Navigation (`#2B2118`)**: High-contrast operations sidebar with notification badges.
+- **Executive KPI Overview**:
+  - Live counters: Total customers, technicians (online/offline/busy), active jobs by status.
+  - Dispatch efficiency metrics: Assignment rate %, acceptance vs. rejection %, average time to assign.
+  - SLA compliance percentage monitor and oldest unassigned job triage alert.
+- **Real-Time Fleet Map**: Interactive canvas overview of all active technicians, ongoing jobs, and dynamic route lines with clickable detail cards.
+- **Jobs & Dispatch Console**: Filterable by status and urgency with a right-hand detail drawer providing **Manual Assignment Overrides**, **Auto Re-Dispatch Triggers**, and **Cancellation**.
+- **Escalation Incident Inbox**: Triage center for SLA-breached jobs and requests with exhausted offer cycles, featuring 1-click re-dispatch and manual assignment.
+- **Technician Fleet Management**: Table with skills, performance, approve/suspend toggles, profile editing, and one-click CSV export.
+- **Customer Directory**: Account activation toggles and comprehensive customer booking history drawers.
+- **Feedback & CSAT**: Average rating tracker, review distribution histogram, and customer review resolution actions.
+- **Revenue & Analytics Reports**: Top-earning technician leaderboard and direct CSV export for jobs and technicians.
+- **Matching & SLA Settings**: Sliders to adjust algorithm scoring weights, offer timeout thresholds, service category CRUD, and SLA tier configuration.
+- **System Audit Trail**: Searchable, immutable event log with side-by-side modal inspecting previous (`old_value`) vs. applied (`new_value`) JSON state diffs.
+
+---
+
+## ⚡ Intelligent Dispatch & Matching Engine
+
+When a customer books a service request, the automated dispatch engine pairs the request with the highest-ranked available technician:
+
+1. **Hard Constraint Filtering**:
+   - Technician must be currently online and approved.
+   - Technician must possess the required skill and certification level for the category.
+   - Customer must be within technician's configured `service_radius_km`.
+   - Technician must not exceed `max_concurrent_jobs`.
+2. **Multi-Factor Weighted Scoring**:
+   $$\text{Score} = w_{\text{dist}} \cdot S_{\text{dist}} + w_{\text{rating}} \cdot S_{\text{rating}} + w_{\text{workload}} \cdot S_{\text{workload}} + w_{\text{skill}} \cdot S_{\text{skill}} + w_{\text{acc}} \cdot S_{\text{acc}}$$
+   *All weights are dynamically configurable via the Admin Settings console.*
+3. **Automated Offer Cascade**:
+   - Job is dispatched to the top-scoring candidate with a configurable countdown timer (default: 120s).
+   - If rejected or expired, the engine advances to the next candidate automatically.
+   - If all $N$ attempts are exhausted, the job is flagged and routed directly to the **Admin Escalation Inbox**.
+4. **High-Risk & Emergency Prioritization**:
+   - Broadcast to an expanded search radius (+30 km).
+   - Filtered exclusively to senior certified technicians.
+   - Shorter offer timeouts (60s) for rapid dispatch.
+5. **Concurrency Safety**: Double-booking and race conditions are prevented using atomic database operations.
+
+---
+
+## ⏱ SLA Management Engine
+
+- **Configurable SLA Tiers**:
+  - **Critical**: 15 min response / 60 min resolution
+  - **High**: 30 min response / 120 min resolution
+  - **Normal**: 60 min response / 240 min resolution
+  - **Low**: 120 min response / 480 min resolution
+- **Deterministic Deadline Computation**: Calculated and stamped at booking creation.
+- **Proactive Breach Detection**: Background worker continuously evaluates deadlines; jobs exceeding 80% of their window are marked `at_risk`.
+- **Auto-Escalation**: Breached and at-risk jobs trigger real-time operator alerts and priority escalation.
+
+---
+
+## 🧠 Scheduling Optimization Engine (Phase 1–7)
+
+In addition to real-time dispatch, DispatchGrid includes an optimization engine for batch scheduling:
+- **Greedy LFJ (Least Flexible Job First)**: 85–95% job coverage in 1–3 seconds using multi-factor constraint validation (HC1–HC10).
+- **ALNS (Adaptive Large Neighborhood Search)**: Metaheuristic using 4 destroy operators × 3 repair operators with Simulated Annealing to reduce travel time, idle time, and SLA penalties.
+- **Disruption Recovery**: Automatic rescheduling when technicians become unavailable or emergency jobs inject mid-day.
+
+---
+
+## 🚀 Quick Start & Setup
+
+### Prerequisites
+- **Python 3.10+** (tested through Python 3.13)
+- **Node.js 18+** & **npm**
+- **Git**
+
+---
+
+### Backend Setup
+
+#### Option A: One-Click Startup (Windows)
+Double-click or run from the project root:
+```powershell
+.\backend\START_V2.bat
+```
+*This activates the virtual environment, automatically runs database migrations and seed data, and launches the FastAPI server on port 8000.*
+
+#### Option B: Manual Startup
+```powershell
+# 1. Navigate to backend directory
+cd backend
+
+# 2. Activate virtual environment
+.\venv\Scripts\activate
+# (On macOS/Linux: source venv/bin/activate)
+
+# 3. Seed test users, categories, SLA tiers, and technicians
+python -m app.seed.v2_seed
+
+# 4. Start the server
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+> **Backend URLs:**
+> - API Base: `http://localhost:8000`
+> - Health Check: `http://localhost:8000/api/health`
+> - Swagger Interactive UI: `http://localhost:8000/docs`
+> - ReDoc: `http://localhost:8000/redoc`
+
+---
+
+### Frontend Setup
+
+In a separate terminal:
+```powershell
+# 1. Navigate to frontend directory
+cd frontend
+
+# 2. Install dependencies (if not already installed)
+npm install
+
+# 3. Start Vite development server
+npm.cmd run dev
+# (On macOS/Linux: npm run dev)
+```
+
+Open **`http://localhost:3000`** in your browser.
+
+---
+
+## 🔑 Test Credentials
+
+The login page contains **1-click quick login buttons** to fill credentials instantly:
+
+| Role | Email | Password | Primary Landing Page |
+|:---|:---|:---|:---|
+| **Admin** | `admin@dispatchgrid.dev` | `Admin@1234` | `/admin/overview` |
+| **Technician** | `raj.tech@example.com` | `Tech@1234` | `/technician/dashboard` |
+| **Customer** | `alice@example.com` | `Customer@1234` | `/customer/book` |
+
+*Additional accounts:*
+- **Customers**: `bob@example.com`, `carol@example.com` (Password: `Customer@1234`)
+- **Technicians**: `priya.tech@example.com`, `amit.tech@example.com`, `sunita.tech@example.com`, `deepak.tech@example.com` (Password: `Tech@1234`)
+
+---
+
+## 📡 REST API Reference
+
+### 🔐 Authentication & Session
+- `POST /api/auth/register` — Register a customer or technician
+- `POST /api/auth/login` — Authenticate and receive JWT access token
+- `GET /api/auth/me` — Current user profile and role verification
+- `POST /api/auth/logout` — Revoke active session
+
+### 👤 Customer Endpoints
+- `GET /api/customer/profile` | `PATCH /api/customer/profile` — View and edit profile
+- `GET /api/customer/addresses` | `POST /api/customer/addresses` — Manage saved addresses
+- `DELETE /api/customer/addresses/{index}` — Remove saved address
+- `GET /api/customer/categories` — List active service offerings
+- `GET /api/customer/nearby-technicians` — Query nearest technicians with ETA & distance
+- `POST /api/customer/requests` — Submit a service request
+- `GET /api/customer/requests` — View customer's booking history
+- `GET /api/customer/requests/{id}` — Live tracking and assigned tech location
+- `PATCH /api/customer/requests/{id}/cancel` — Cancel active request
+- `POST /api/customer/requests/{id}/rate` — Submit rating, review text, and optional tip
+
+### 🔧 Technician Endpoints
+- `GET /api/technician/profile` | `PATCH /api/technician/profile` — Manage bio, radius & capacity
+- `PATCH /api/technician/availability` — Toggle Online / Offline status
+- `PATCH /api/technician/location` — Broadcast updated GPS coordinates
+- `GET /api/technician/offers` — View pending job offers
+- `POST /api/technician/offers/{id}/accept` — Accept job offer
+- `POST /api/technician/offers/{id}/reject` — Reject job offer with reason
+- `GET /api/technician/jobs` | `GET /api/technician/jobs/{id}` — Assigned job history and detail
+- `PATCH /api/technician/jobs/{id}/status` — Advance status (`en_route`, `in_progress`, `completed`)
+- `POST /api/technician/jobs/{id}/notes` — Append on-site diagnostic notes
+- `GET /api/technician/earnings` — Summary of gross earnings, base pay, and tips
+- `GET /api/technician/ratings` — Customer feedback review history
+
+### 🛡 Admin Endpoints
+- `GET /api/admin/dashboard/overview` — Executive KPIs, fleet breakdown, oldest unassigned job
+- `GET /api/admin/dashboard/dispatch` — Dispatch metrics, offer acceptance/rejection percentages
+- `GET /api/admin/dashboard/workload` — Per-technician capacity utilization
+- `GET /api/admin/dashboard/sla` — SLA compliance rates, breached and at-risk counters
+- `GET /api/admin/dashboard/feedback` — CSAT stats and rating distribution
+- `GET /api/admin/dashboard/revenue` — Financial summaries and top technician earnings
+- `GET /api/admin/customers` | `PATCH /api/admin/customers/{id}` — Manage customer accounts
+- `GET /api/admin/technicians` | `PATCH /api/admin/technicians/{id}/approve` | `.../suspend` — Fleet controls
+- `GET /api/admin/jobs` — Full jobs registry with filters
+- `PATCH /api/admin/jobs/{id}/assign` — Force manual technician assignment
+- `PATCH /api/admin/jobs/{id}/reassign` — Trigger auto re-dispatch matching
+- `PATCH /api/admin/jobs/{id}/cancel` — Admin cancellation override
+- `GET /api/admin/config/matching` | `PATCH /api/admin/config/matching` — Algorithm scoring weights
+- `GET /api/admin/config/categories` — Service catalog management
+- `GET /api/admin/config/sla-tiers` — SLA tier definitions
+- `GET /api/admin/audit-log` — Full system audit history
+- `GET /api/admin/export/jobs` | `GET /api/admin/export/technicians` — CSV data downloads
+
+---
+
+## 📁 Directory Structure
+
+```
+Hackathon_Project/
+├── .gitignore                      # Comprehensive root gitignore
+├── README.md                       # Master system documentation
+├── backend/
+│   ├── START_V2.bat                # One-click startup script (Windows)
+│   ├── TEST_CREDENTIALS.md         # Credentials quick-reference
+│   ├── dispatchgrid.db             # Local SQLite database
+│   ├── requirements.txt            # Python dependencies
+│   ├── app/
+│   │   ├── main.py                 # FastAPI application factory
+│   │   ├── config.py               # Settings and environment bindings
+│   │   ├── database.py             # SQLAlchemy session & Base
+│   │   ├── models/                 # ORM entities (User, Request, Offer, SLA, etc.)
+│   │   ├── schemas/                # Pydantic validation models
+│   │   ├── services/               # Auth, matching engine & SLA services
+│   │   ├── routers/                # REST endpoints (auth, customer, tech, admin)
+│   │   ├── scheduler/              # Phase 1-7 scheduling & optimization engine
+│   │   └── seed/                   # Database seeders (v2_seed.py)
+│   └── tests/                      # Automated test suite
+│
+└── frontend/
+    ├── package.json                # Dependencies and scripts
+    ├── vite.config.ts              # Vite server & proxy configuration
+    ├── tailwind.config.js          # Design tokens & color theme configuration
+    └── src/
+        ├── App.tsx                 # Routing and role guards
+        ├── index.css               # Design system CSS variables & animations
+        ├── types/index.ts          # TypeScript domain type definitions
+        ├── services/apiClient.ts   # Axios API client
+        ├── context/AuthContext.tsx # Authentication state and role management
+        ├── components/
+        │   ├── common/             # Zero-dependency UI library (Button, Modal, Map, etc.)
+        │   └── layout/             # Navbar, Sidebar, DashboardLayout
+        └── pages/
+            ├── Login.tsx           # Multi-role authentication & test pills
+            ├── customer/           # BookService, MyBookings, CustomerProfile, History
+            ├── technician/         # MySchedule, JobHistory, Earnings, TechnicianProfile
+            └── admin/              # Overview, LiveMap, Jobs, Escalations, Feedback, Settings, Audit
+```
+
+---
+
+## 🎯 Button Wiring & UI Audit
+
+In accordance with the **Golden Rule ("No Dead UI")**, every interactive element in DispatchGrid v2 is verified to perform an action, update state, navigate routes, or execute an API request with visible feedback (toast notifications, modal confirmation, or status advancement).
+
+👉 **Review the complete [Button Wiring Checklist](file:///C:/Users/sathe/.gemini/antigravity/brain/071aaf50-09a0-4187-bb60-62b56653bcd6/button_wiring_checklist.md)** auditing all 54 user actions across the Customer, Technician, and Admin interfaces.
+
+---
+
+## 📄 License & Credits
+
+Built for the Field Service Intelligent Dispatch Hackathon.  
+© 2026 DispatchGrid Team. All rights reserved.
